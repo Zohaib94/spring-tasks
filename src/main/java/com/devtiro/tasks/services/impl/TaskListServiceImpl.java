@@ -61,4 +61,15 @@ public class TaskListServiceImpl implements TaskListService {
 
     return taskListRepository.save(updationList);
   }
+
+  @Override
+  public void deleteTaskList(UUID id) {
+    TaskList deletionList = taskListRepository.findById(id).orElse(null);
+
+    if (deletionList == null) {
+      throw new IllegalArgumentException("Incorrect ID");
+    }
+
+    taskListRepository.deleteById(id);
+  }
 }

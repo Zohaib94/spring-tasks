@@ -26,7 +26,7 @@ public class Task {
   @Column(name = "status", nullable = false)
   private TaskStatusEnum taskStatus;
 
-  @Column(name = "status", nullable = false)
+  @Column(name = "priority", nullable = false)
   private TaskPriority taskPriority;
 
   @ManyToOne(fetch = FetchType.LAZY)

@@ -4,11 +4,10 @@ import com.devtiro.tasks.domain.dto.TaskListDto;
 import com.devtiro.tasks.domain.entities.TaskList;
 import com.devtiro.tasks.mappers.TaskListMapper;
 import com.devtiro.tasks.services.TaskListService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/task-lists")
@@ -23,8 +22,17 @@ public class TaskListController {
 
   @GetMapping
   public List<TaskListDto> listTaskLists() {
-    List<TaskList> taskLists = taskListService.listTaskLists();
+    return taskListService.listTaskLists().stream().map(taskListMapper::toDto).toList();
+  }
 
-    return taskLists.stream().map(taskListMapper::toDto).toList();
+  @GetMapping(path = "/{id}")
+  public TaskListDto getTaskList(@PathVariable UUID id) {
+    return taskListService.getTaskList(id).map(taskListMapper::toDto).orElse(null);
+  }
+
+  @PostMapping
+  public TaskListDto createTaskList(@RequestBody TaskListDto taskListDto) {
+    TaskList taskList = taskListMapper.fromDto(taskListDto);
+    return taskListMapper.toDto(taskListService.createTaskList(taskList));
   }
 }

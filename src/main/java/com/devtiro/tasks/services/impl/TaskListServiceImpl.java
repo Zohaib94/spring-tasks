@@ -46,4 +46,19 @@ public class TaskListServiceImpl implements TaskListService {
   public Optional<TaskList> getTaskList(UUID id) {
     return taskListRepository.findById(id);
   }
+
+  @Override
+  public TaskList updateTaskList(UUID id, TaskList taskList) {
+    TaskList updationList = taskListRepository.findById(id).orElse(null);
+
+    if (updationList == null) {
+      throw new IllegalArgumentException("Incorrect ID");
+    }
+
+    updationList.setTitle(taskList.getTitle());
+    updationList.setDescription(taskList.getDescription());
+    updationList.setUpdatedAt(LocalDateTime.now());
+
+    return taskListRepository.save(updationList);
+  }
 }
